@@ -60,3 +60,21 @@ Tambahkan kode dari tutorial 6 dalam widget build
 Buat widget stateless untuk menampilkan card sesuai tutorial 6
 
 Untuk menambahkan warna pada setiap card, tambahkan atribute color pada class ShopItem, lalu tambahkan color pada ShopItem pada list items, dan tambahkan item.color pada widget build shop card.
+
+Tugas 7
+
+-1. Perbedaan navigator.push() dan navigator.pushReplacement() adalah navigator.push mendirect ke page baru dengan menimpa page sebelumnya. Sedangkan navigator.pushReplacement() menutup page sebelumnya kemudian direct ke page berikutnya.
+
+-2. Elemen input form yang digunakan adalah TextFormField. TextFormField merupakan salah satu form yang disediakan flutter. TextFormField digunakan karena TextFormField bisa menyimpan, mereset, dan memvalidasi input dibandingkan dengan TextForm yang hanya menerima input dengan asumsi pasti benar
+
+-3. Flutter layout widgets dibagi 2, yaitu single child layout widget dan multi child layout widget. Single child layout widget hanya diisi oleh satu child widget saja. Contohnya adalah Center yang berfungsi membuat widget childnya berada pada tengah page. Padding untuk membuat child dalamnya memiliki jarak terluar. SizedBox untuk membuat box dengan ukuran tertenu. Kemudian, multi child layout widget merupakan widget layout yang dapat diisi lebih dari satu widget. Contohnya adalah widget Column yang melayout widget-widget ke dalam satu kolom, widget Row yang melayout widget-widget ke dalam satu baris. Gridwview yang melayout children widget menjadi dalam bentuk grid
+
+-4. Penerapan clean architecture pada apps flutter dilakukan dengan membagi layer dengan tujuan untuk memudahkan developer untuk mengubah, mengembangkan, dan memaintain aplikasi. Salah satu penerapannya adalah membagi widget dan page. Widget yang sama dan sering digunakan akan ditempatkan di folder tertentu, misalnya bernama widget. Object disimpan dalam folder object, dan Screen dalam apps flutter disimpan dalam folder screen. 
+
+-5 
+- Buatlah ShopListForm dengan refernsi kode dari Tutorial 7
+- Buatlah drawer, dan berikan route ke pilihan halaman utama ke HomePage dan tambah item ke halaman ShopListForm
+- Pada HomePage, tambahkan drawer pada scaffoldnya
+- Pada HomePage, perhatikan ikon tambah item. Tambahkan route ke ShopListForm
+
+
