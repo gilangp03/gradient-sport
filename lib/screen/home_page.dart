@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
-
+import 'package:gradient_sport/widgets/left_drawer.dart';
+import 'package:gradient_sport/screen/shoplist_form.dart';
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
 final List<ShopItem> items = [
-    ShopItem("Lihat Item", Icons.checklist, Colors.blue),
-    ShopItem("Tambah Item", Icons.add_shopping_cart, Colors.purple),
-    ShopItem("Logout", Icons.logout, Colors.red),
+    ShopItem("Lihat Item", Icons.checklist, Color.fromRGBO(228, 49, 43,1)),
+    ShopItem("Tambah Item", Icons.add_shopping_cart, Colors.black),
+    ShopItem("Logout", Icons.logout, Color.fromRGBO(20,153,84,1)),
 ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Color.fromRGBO(20,153,84,1),
         title: const Text(
           'Gradient Sport', style: TextStyle(color: Colors.white),
         ),
       ),
+      drawer: const LeftDrawer(),
       body: SingleChildScrollView(
         // Widget wrapper yang dapat discroll
         child: Padding(
@@ -83,7 +85,16 @@ class ShopCard extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(
                 content: Text("Kamu telah menekan tombol ${item.name}!")));
+                if (item.name == "Tambah Item") {
+      // TODO: Gunakan Navigator.push untuk melakukan navigasi ke MaterialPageRoute yang mencakup ShopFormPage.
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ShopFormPage(),
+            ));
+          } 
         },
+        
         child: Container(
           // Container untuk menyimpan Icon dan Text
           padding: const EdgeInsets.all(8),
