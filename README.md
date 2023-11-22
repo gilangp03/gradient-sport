@@ -78,3 +78,4 @@ Tugas 7
 - Pada HomePage, perhatikan ikon tambah item. Tambahkan route ke ShopListForm
 
 
+Tugas 8

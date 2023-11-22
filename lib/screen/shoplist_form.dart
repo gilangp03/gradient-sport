@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gradient_sport/widgets/left_drawer.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'home_page.dart';
 
 class ShopFormPage extends StatefulWidget {
     const ShopFormPage({super.key});
@@ -12,10 +17,13 @@ class ShopFormPage extends StatefulWidget {
 class _ShopFormPageState extends State<ShopFormPage> {
     final _formKey = GlobalKey<FormState>();
     String _name = "";
+    int _stock= 0;
     int _price = 0;
-    String _description = "";
+    String _detail = "";
+
     @override
     Widget build(BuildContext context) {
+       final request = context.watch<CookieRequest>();
         return Scaffold(
   appBar: AppBar(
     title: const Center(
@@ -59,8 +67,35 @@ class _ShopFormPageState extends State<ShopFormPage> {
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
             decoration: InputDecoration(
-              hintText: "Jumlah",
-              labelText: "Jumlah",
+              hintText: "Stok",
+              labelText: "Stok",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+            ),
+            // TODO: Tambahkan variabel yang sesuai
+            onChanged: (String? value) {
+              setState(() {
+                _stock = int.parse(value!);
+              });
+            },
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return "Stok tidak boleh kosong!";
+              }
+              if (int.tryParse(value) == null) {
+                return "Stok harus berupa angka!";
+              }
+              return null;
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextFormField(
+            decoration: InputDecoration(
+              hintText: "Harga",
+              labelText: "Harga",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5.0),
               ),
@@ -86,8 +121,8 @@ class _ShopFormPageState extends State<ShopFormPage> {
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
             decoration: InputDecoration(
-              hintText: "Deskripsi",
-              labelText: "Deskripsi",
+              hintText: "Detail",
+              labelText: "Detail",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5.0),
               ),
@@ -95,7 +130,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
             onChanged: (String? value) {
               setState(() {
                 // TODO: Tambahkan variabel yang sesuai
-                _description = value!;
+                _detail = value!;
               });
             },
             validator: (String? value) {
@@ -115,38 +150,36 @@ class _ShopFormPageState extends State<ShopFormPage> {
                 backgroundColor:
                     MaterialStateProperty.all(Colors.indigo),
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Produk berhasil tersimpan'),
-                            content: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: [
-                                  Text('Nama: $_name'),
-                                  Text('Harga: $_price'),
-                                  Text('Deskripsi: $_description'),
-                                  // TODO: Munculkan value-value lainnya
-                                ],
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    _formKey.currentState!.reset();
-                    }
+        // Kirim ke Django dan tunggu respons
+        // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+        final response = await request.postJson(
+        "https://jatama-management-app-production.up.railway.app/create-flutter/",
+        jsonEncode(<String, String>{
+            'name': _name,
+            'stock': _stock.toString(),
+            'price': _price.toString(),
+            'detail': _detail,
+            // TODO: Sesuaikan field data sesuai dengan aplikasimu
+        }));
+        if (response['status'] == 'success') {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(
+            content: Text("Produk baru berhasil disimpan!"),
+            ));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+            );
+        } else {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(
+                content:
+                    Text("Terdapat kesalahan, silakan coba lagi."),
+            ));
+        }
+    }
               },
               child: const Text(
                 "Save",
